@@ -32,11 +32,83 @@ Verify and display the resulting product matrix.
 
 ## PROGRAM:
 
-*(Paste the code for Matrix Vector Multiplication using MapReduce here.)*
+```
+# Matrix Multiplication using MapReduce
+
+# Matrix A
+A = [
+    [1, 2],
+    [3, 4]
+]
+
+# Matrix B
+B = [
+    [5, 6],
+    [7, 8]
+]
+
+# Mapper Phase
+def mapper(A, B):
+    intermediate = []
+
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                intermediate.append(((i, j), A[i][k] * B[k][j]))
+
+    return intermediate
+
+
+# Shuffle and Sort Phase
+def shuffle(intermediate):
+    grouped = {}
+
+    for key, value in intermediate:
+        if key not in grouped:
+            grouped[key] = []
+        grouped[key].append(value)
+
+    return grouped
+
+
+# Reducer Phase
+def reducer(grouped):
+    result = {}
+
+    for key, values in grouped.items():
+        result[key] = sum(values)
+
+    return result
+
+
+# Execute MapReduce
+intermediate = mapper(A, B)
+grouped = shuffle(intermediate)
+result = reducer(grouped)
+
+
+# Display Result
+print("Matrix A:")
+for row in A:
+    print(row)
+
+print("\nMatrix B:")
+for row in B:
+    print(row)
+
+print("\nResultant Matrix (A x B):")
+
+for i in range(len(A)):
+    row = []
+    for j in range(len(B[0])):
+        row.append(result[(i, j)])
+    print(row)
+
+```
 
 ## OUTPUT:
 
-*(Paste the execution output showing the resultant matrix here.)*
+*(<img width="1920" height="1080" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/90a1ec34-a6a3-4be3-a41c-600417fa2a89" /)*
 
 ## RESULT:
 
