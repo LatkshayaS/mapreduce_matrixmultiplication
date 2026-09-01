@@ -1,6 +1,6 @@
 # Exp 01 Matrix Multiplication using MapReduce
 
-**Date:**
+**Date:06/08/2026**
 
 ## AIM:
 To implement Matrix Vector Multiplication using the MapReduce programming model.
@@ -33,82 +33,43 @@ Verify and display the resulting product matrix.
 ## PROGRAM:
 
 ```
-# Matrix Multiplication using MapReduce
+from collections import defaultdict
 
-# Matrix A
-A = [
-    [1, 2],
-    [3, 4]
-]
+matrix = [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]
 
-# Matrix B
-B = [
-    [5, 6],
-    [7, 8]
-]
+vector = [1, 2, 3]
 
-# Mapper Phase
-def mapper(A, B):
-    intermediate = []
+def mapper(matrix, vector):
+    mapped = []
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            product = matrix[i][j] * vector[j]
+            mapped.append((i, product)) 
+    return mapped
 
-    for i in range(len(A)):
-        for j in range(len(B[0])):
-            for k in range(len(B)):
-                intermediate.append(((i, j), A[i][k] * B[k][j]))
-
-    return intermediate
-
-
-# Shuffle and Sort Phase
-def shuffle(intermediate):
-    grouped = {}
-
-    for key, value in intermediate:
-        if key not in grouped:
-            grouped[key] = []
-        grouped[key].append(value)
-
-    return grouped
-
-
-# Reducer Phase
-def reducer(grouped):
-    result = {}
-
-    for key, values in grouped.items():
-        result[key] = sum(values)
-
+def reducer(mapped_data):
+    result = defaultdict(int)
+    for key, value in mapped_data:
+        result[key] += value
     return result
 
+mapped = mapper(matrix, vector)
+reduced = reducer(mapped)
 
-# Execute MapReduce
-intermediate = mapper(A, B)
-grouped = shuffle(intermediate)
-result = reducer(grouped)
+print("Mapped Output:")
+for item in mapped:
+    print(item)
 
-
-# Display Result
-print("Matrix A:")
-for row in A:
-    print(row)
-
-print("\nMatrix B:")
-for row in B:
-    print(row)
-
-print("\nResultant Matrix (A x B):")
-
-for i in range(len(A)):
-    row = []
-    for j in range(len(B[0])):
-        row.append(result[(i, j)])
-    print(row)
-
+print("\nFinal Result (Matrix × Vector):")
+for row in sorted(reduced):
+    print(f"Row {row}: {reduced[row]}")
 ```
+
 
 ## OUTPUT:
 
-*(<img width="1920" height="1080" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/90a1ec34-a6a3-4be3-a41c-600417fa2a89" /)*
+<img width="416" height="356" alt="image" src="https://github.com/user-attachments/assets/f6ae1b5a-3b0d-44a8-96ae-e365cafd3861" />
+
 
 ## RESULT:
 
