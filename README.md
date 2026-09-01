@@ -1,4 +1,4 @@
-# Exp 01 Matrix Multiplication using MapReduce
+# Ex 01 Matrix Multiplication using MapReduce
 
 **Date:06/08/2026**
 
